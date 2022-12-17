@@ -1,4 +1,4 @@
-#!/bin/pwsh
+#!/usr/bin/env pwsh
 
 function New-TemporaryDirectory {
     $parent = [System.IO.Path]::GetTempPath()
@@ -12,8 +12,8 @@ $Temp = New-TemporaryDirectory
 $Build = "$Dir\build"
 New-Item -ItemType Directory -Force -Path $Build | Out-Null
 
-$Name = Get-Content $Dir\mod\header.rpy | Select-String '^\s*name="([^"]+)"' | ForEach-Object { $_.Matches[0].Groups[1].Value }
-$Version = Get-Content $Dir\mod\header.rpy | Select-String '^\s*version="([^"]+)"' | ForEach-Object { $_.Matches[0].Groups[1].Value }
+$Name = Get-Content $Dir\mod\aa_header.rpy | Select-String '^\s*name="([^"]+)"' | ForEach-Object { $_.Matches[0].Groups[1].Value }
+$Version = Get-Content $Dir\mod\aa_header.rpy | Select-String '^\s*version="([^"]+)"' | ForEach-Object { $_.Matches[0].Groups[1].Value }
 $Package = $Name.ToLower() -Replace "\s", "-"
 
 $Mod = "$Temp\game\Submods"
@@ -22,5 +22,5 @@ $Mod = "$Mod\$Name"
 
 Copy-Item -Recurse $Dir\mod $Mod
 
-Compress-Archive -Update -Path $Temp\game -DestinationPath $Build\$Package-$Version.zip
+Compress-Archive -Update -Path $Temp\game\Submods -DestinationPath $Build\$Package-$Version.zip
 Remove-Item -Recurse $Temp
